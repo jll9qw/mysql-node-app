@@ -30,58 +30,51 @@ function loadTable() {
 }
 
 function userPurchase() {
-  inquirer
-    .prompt([{
-      name: "purchase",
-      type: "input",
-      message: "Key the item id # of the merch you would like to buy (Press 'q' to quit)",
-    //   validate: function(answer) {
-    //     if (
-    //       (parseInt(answer) <= 10 && parseInt(answer) > 0) ||
-    //       answer.toLowerCase() === "q"
-    //     ) {
-    //       return true;
-    //     }
-    //     return "ERROR!!!";
-    //   }
-    },
-    {
-        name: "quantity",
-        type: "input",
-        message: "Please enter order quantity (Press 'q' to quit)",
-        validate: function(answer) {
-          if (
-            (parseInt(answer) <= 10 && parseInt(answer) > 0) ||
-            answer.toLowerCase() === "q"
-          ) {
-            return true;
-          }
-          return "HEY THIS DONT WORK";
-        }
-      }
-    ])
-    .then(function(res) {
-      if (res.purchase.toLowerCase() === "q") {
-        console.log("Goodbye!");
-        process.exit(0);
-      }
-      userOrder();
-      
-    });
-}
+  connection.query("SELECT * from products", function(err, res) {
+    if (err) throw err;
+    // console.table(res);
 
-// function userQuantity() {
-//   inquirer
-//     .prompt(
-//     .then(function(res) {
-//       if (res.quantity.toLowerCase() === "q") {
-//         console.log("Goodbye!");
-//         process.exit(0);
-//       }
-//       
-//     });
-  
-// }
+    inquirer
+      .prompt([
+        {
+          name: "purchase",
+          type: "input",
+          message:
+            "Key the item id # of the product you would like to buy (Press 'q' to quit)",
+          validate: function(answer) {
+            if (
+              (parseInt(answer) <= 10 && parseInt(answer) > 0) ||
+              answer.toLowerCase() === "q"
+            ) {
+              return true;
+            }
+            return "ITEM ID NOT FOUND!!";
+          }
+        },
+        {
+          name: "quantity",
+          type: "input",
+          message: "Please enter an order quantity (Press 'q' to quit)",
+          validate: function(answer) {
+            if (
+              (parseInt(answer) <= res.quantity && parseInt(answer) > 0) ||
+              answer.toLowerCase() === "q"
+            ) {
+              return true;
+            }
+            return "NOT ENOUGH IN STOCK!!!";
+          }
+        }
+      ])
+      .then(function(res) {
+        if (res.purchase.toLowerCase() === "q") {
+          console.log("Goodbye!");
+          process.exit(0);
+        }
+        userOrder();
+      });
+  });
+}
 
 function userOrder(answer) {
   console.log("Updating store inventory...\n");
@@ -97,18 +90,17 @@ function userOrder(answer) {
       }
     ],
     function(err, res) {
-        console.table(res);
-        // Call deleteProduct AFTER the UPDATE completes
-        // deleteProduct();
-      }
+      console.table(res);
+      // Call deleteProduct AFTER the UPDATE completes
+      // deleteProduct();
+    }
     //   loadTable(answer)
     // var price = userPurchase * userQuantity;
     // console.log(price);
   );
   console.log(query.sql);
-//   loadTable();
+  //   loadTable();
 }
-
 
 //
 
