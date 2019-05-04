@@ -31,55 +31,57 @@ function loadTable() {
 
 function userPurchase() {
   inquirer
-    .prompt({
+    .prompt([{
       name: "purchase",
       type: "input",
-      message: "What would you like to purchase? (Press 'q' to quit)",
-      validate: function(answer) {
-        if (
-          (parseInt(answer) <= 10 && parseInt(answer) > 0) ||
-          answer.toLowerCase() === "q"
-        ) {
-          return true;
+      message: "Key the item id # of the merch you would like to buy (Press 'q' to quit)",
+    //   validate: function(answer) {
+    //     if (
+    //       (parseInt(answer) <= 10 && parseInt(answer) > 0) ||
+    //       answer.toLowerCase() === "q"
+    //     ) {
+    //       return true;
+    //     }
+    //     return "ERROR!!!";
+    //   }
+    },
+    {
+        name: "quantity",
+        type: "input",
+        message: "Please enter order quantity (Press 'q' to quit)",
+        validate: function(answer) {
+          if (
+            (parseInt(answer) <= 10 && parseInt(answer) > 0) ||
+            answer.toLowerCase() === "q"
+          ) {
+            return true;
+          }
+          return "HEY THIS DONT WORK";
         }
-        return "HEY THIS DONT WORK";
       }
-    })
+    ])
     .then(function(res) {
       if (res.purchase.toLowerCase() === "q") {
-        console.log("Goodbye!");
-        process.exit(0);
-      }
-      userQuantity();
-    });
-}
-
-function userQuantity() {
-  inquirer
-    .prompt({
-      name: "quantity",
-      type: "input",
-      message: "How many would you like to purchase? (Press 'q' to quit)",
-      validate: function(answer) {
-        if (
-          (parseInt(answer) <= 10 && parseInt(answer) > 0) ||
-          answer.toLowerCase() === "q"
-        ) {
-          return true;
-        }
-        return "HEY THIS DONT WORK";
-      }
-    })
-    .then(function(res) {
-      if (res.quantity.toLowerCase() === "q") {
         console.log("Goodbye!");
         process.exit(0);
       }
       userOrder();
       
     });
-  
 }
+
+// function userQuantity() {
+//   inquirer
+//     .prompt(
+//     .then(function(res) {
+//       if (res.quantity.toLowerCase() === "q") {
+//         console.log("Goodbye!");
+//         process.exit(0);
+//       }
+//       
+//     });
+  
+// }
 
 function userOrder(answer) {
   console.log("Updating store inventory...\n");
