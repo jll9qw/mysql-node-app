@@ -18,21 +18,14 @@ connection.connect(function(err) {
   if (err) throw err;
   console.log("connected as id " + connection.threadId + "\n");
 
-  loadTable();
+  userPurchase();
 });
 
-function loadTable() {
-  connection.query("SELECT * from products", function(err, res) {
-    if (err) throw err;
-    console.table(res);
-    userPurchase();
-  });
-}
 
 function userPurchase() {
   connection.query("SELECT * from products", function(err, res) {
     if (err) throw err;
-    // console.table(res);
+    console.table(res);
 
     inquirer
       .prompt([
@@ -51,13 +44,14 @@ function userPurchase() {
             return "ITEM ID NOT FOUND!!";
           }
         },
-        { 
+        {
           name: "quantity",
           type: "input",
           message: "Please enter an order quantity (Press 'q' to quit)",
           validate: function(answer) {
             if (
-              (parseInt(answer) <= 3001 && parseInt(answer) > 0) ||
+              (parseInt(answer) <= res[0].quantity
+               && parseInt(answer) > 0) ||
               answer.toLowerCase() === "q"
             ) {
               return true;
@@ -70,23 +64,37 @@ function userPurchase() {
         if (answer.purchase.toLowerCase() === "q") {
           console.log("Goodbye!");
           process.exit(0);
-        }
-        else{
-          var chosenItem;
-          for (var i = 0; i < results.length; i++) {
-            if (results[i].item_name === answer.choice) {
-              chosenItem = results[i];
-            }
-          }
-          console.log("Updating store inventory...\n")
-        }
-        // userOrder();
-      });
-  });
-}
-// function userOrder(purchase, quantity) {
-//   console.log(purchase);
-//   console.log("Updating store inventory...\n");
+        } else {
+          var chosenItem = parseInt(answer.purchase);
+          var orderItem = parseInt(answer.quantity);
 
-  
-//     }
+          console.log(answer.quantity);
+          // var price = orderItem * chosenItem;
+          // console.log("Your total price is... $" + price);
+          var merchInventory = res[0].quantity - answer.quantity ;
+          // console.log(orderItem);
+          connection.query(
+            "UPDATE products SET ? WHERE ?",
+            [
+              {
+                quantity: merchInventory
+              },
+              {
+                item_id: chosenItem
+              }
+            ],
+            function(error) {
+              if (error) throw err;
+              console.log("Thank you for your purchase! \n");
+              console.log("Updating store inventory...")
+              
+             userPurchase();
+            },
+         
+          );
+        }
+      });
+   
+  });
+
+}
