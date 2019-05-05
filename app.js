@@ -51,13 +51,13 @@ function userPurchase() {
             return "ITEM ID NOT FOUND!!";
           }
         },
-        {
+        { 
           name: "quantity",
           type: "input",
           message: "Please enter an order quantity (Press 'q' to quit)",
           validate: function(answer) {
             if (
-              (parseInt(answer) <= res.quantity && parseInt(answer) > 0) ||
+              (parseInt(answer) <= 3001 && parseInt(answer) > 0) ||
               answer.toLowerCase() === "q"
             ) {
               return true;
@@ -66,55 +66,27 @@ function userPurchase() {
           }
         }
       ])
-      .then(function(res) {
-        if (res.purchase.toLowerCase() === "q") {
+      .then(function(answer) {
+        if (answer.purchase.toLowerCase() === "q") {
           console.log("Goodbye!");
           process.exit(0);
         }
-        userOrder();
+        else{
+          var chosenItem;
+          for (var i = 0; i < results.length; i++) {
+            if (results[i].item_name === answer.choice) {
+              chosenItem = results[i];
+            }
+          }
+          console.log("Updating store inventory...\n")
+        }
+        // userOrder();
       });
   });
 }
+// function userOrder(purchase, quantity) {
+//   console.log(purchase);
+//   console.log("Updating store inventory...\n");
 
-function userOrder(answer) {
-  console.log("Updating store inventory...\n");
-
-  var quantityLeft = res[0].quantity - answer.quantity;
-  var query = connection.query(
-    // UPDATE [table] SET [column] = '[updated-value]' WHERE [column] = [value];
-    "UPDATE products SET ? WHERE ?",
-    [
-      { quantity: quantityLeft },
-      {
-        item_id: answer.purchase
-      }
-    ],
-    function(err, res) {
-      console.table(res);
-      // Call deleteProduct AFTER the UPDATE completes
-      // deleteProduct();
-    }
-    //   loadTable(answer)
-    // var price = userPurchase * userQuantity;
-    // console.log(price);
-  );
-  console.log(query.sql);
-  //   loadTable();
-}
-
-//
-
-//   function deleteProduct() {
-//     console.log("Deleting all strawberry icecream...\n");
-//     connection.query(
-//       "DELETE FROM products WHERE ?",
-//       {
-//         flavor: "strawberry"
-//       },
-//       function(err, res) {
-//         console.log(res.affectedRows + " products deleted!\n");
-//         // Call readProducts AFTER the DELETE completes
-//         readProducts();
-//       }
-//     );
-//   }
+  
+//     }
