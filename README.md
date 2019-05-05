@@ -1,4 +1,4 @@
-# mysql-node-app
+# Bamazon (Online Store)
 ## A merchant store web application using Node.js and MySQL 
 
 
@@ -9,4 +9,3 @@ The customer view allows the user to view the current inventory/catalog of items
 
 
  [Demo](https://drive.google.com/file/d/19tSz_Iueo8nIwywHgFc063pbVQ4Fl5Bv/view?usp=sharing)
- 
