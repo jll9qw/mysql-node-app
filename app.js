@@ -86,6 +86,7 @@ function userPurchase() {
             function(error) {
               if (error) throw err;
               console.log("Thank you for your purchase! \n");
+              console.log("Total price is:  $"+res[0].price * orderItem);
               console.log("Updating store inventory...");
               
               
