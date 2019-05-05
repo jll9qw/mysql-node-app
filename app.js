@@ -86,7 +86,8 @@ function userPurchase() {
             function(error) {
               if (error) throw err;
               console.log("Thank you for your purchase! \n");
-              console.log("Updating store inventory...")
+              console.log("Updating store inventory...");
+              
               
              userPurchase();
             },
